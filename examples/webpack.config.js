@@ -1,10 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const webpack = require('webpack');
+const fs = require('fs')
+const path = require('path')
+const webpack = require('webpack')
 
-module.export = {
-  mode:'development',
-    /**
+module.exports = {
+  mode: 'development',
+
+  /**
    * 我们会在 examples 目录下建多个子目录
    * 我们会把不同章节的 demo 放到不同的子目录中
    * 每个子目录的下会创建一个 app.ts
@@ -14,27 +15,27 @@ module.export = {
    */
 
    // fs.readdirSync将返回一个包含“指定目录下所有文件名称”的数组。
-   // console.log(__dirname) => /mnt/e/font/ts-bee/examples 指向js文件的绝对路径
-   // console.log(fs.readdirSync(__dirname)) => ['sample','global.css','server.js','webpack.config.js',...]
+   // console.log(__dirname) => /mnt/e/font/ts-bee/examples 指向js文件的绝对路径的目录
+   // console.log(fs.readdirSync(__dirname)) => ['simple','global.css','server.js','webpack.config.js',...]
    // fs.statSync(fullDir) =>一个stat对象  {dev:16,uid:1000,size:4096}
+
   entry:fs.readdirSync(__dirname).reduce((entries,dir)=>{
-   const fullDir = path.join(__dirname,dir)
-   const entry = path.join(fullDir,'app.ts')   // => 'sample/app.ts'
-    if(fs.statSync(fullDir).isDirectory() && fs.existsSync(entry)){
-      entries[dir] = ['webpack-hot-middleware/client', entry]
-    }
-    return entries
-  },{}),
+    const fullDir = path.join(__dirname,dir)
+    const entry = path.join(fullDir,'app.ts')   // => 'sample/app.ts'
+     if(fs.statSync(fullDir).isDirectory() && fs.existsSync(entry)){
+       entries[dir] = ['webpack-hot-middleware/client', entry]
+     }
+     return entries
+   },{}),
 
   /**
-   * 根据不同的目录名称,打包生成目标js，名称和目录名一致
+   * 根据不同的目录名称，打包生成目标 js，名称和目录名一致
    */
-  output:{
-    path:path.join(__dirname,'__build__'),
-    filename:'[name].js',
-    publicPath:"/__build__/"
+  output: {
+    path: path.join(__dirname, '__build__'),
+    filename: '[name].js',
+    publicPath: '/__build__/'
   },
-
 
   module: {
     rules: [
@@ -69,6 +70,4 @@ module.export = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ]
-
-
 }
