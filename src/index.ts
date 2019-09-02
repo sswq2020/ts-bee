@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
+import { transfromRequest } from './helpers/data'
 
 /**
  * @description axios函数的主体,调用xhr函数,实现浏览器ajax功能
@@ -11,8 +12,13 @@ function axios(config: AxiosRequestConfig): void {
   xhr(config)
 }
 
+/**
+ * @description 对config每一个配置进行包装处理
+ * @param {AxiosRequestConfig} config
+ */
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transformURL(config)
+  config.data = transformRequestData(config)
 }
 
 /**
@@ -22,6 +28,15 @@ function processConfig(config: AxiosRequestConfig): void {
 function transformURL(config: AxiosRequestConfig): string {
   const { url, params } = config
   return buildURL(url, params)
+}
+
+/**
+ * @description 调用buildURL函数,对data进行处理
+ * @param {AxiosRequestConfig} config
+ */
+function transformRequestData(config: AxiosRequestConfig): any {
+  const { data } = config
+  return transfromRequest(data)
 }
 
 export default axios
