@@ -1,4 +1,4 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 /**
  * @author sswq
@@ -46,7 +46,7 @@ export function buildURL(url: string, params: any): string {
     values.forEach(item => {
       if (isDate(item)) {
         item = item.toISOString()
-      } else if (isObject(item)) {
+      } else if (isPlainObject(item)) {
         item = JSON.stringify(item)
       }
       parts.push(`${encode(key)}=${encode(item)}`)
