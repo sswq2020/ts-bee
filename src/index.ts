@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
 import { transfromRequest } from './helpers/data'
+import { processHeaders } from './helpers/headers'
 
 /**
  * @description axios函数的主体,调用xhr函数,实现浏览器ajax功能
@@ -18,6 +19,7 @@ function axios(config: AxiosRequestConfig): void {
  */
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transformURL(config)
+  config.headers = transformHeaders(config)
   config.data = transformRequestData(config)
 }
 
@@ -37,6 +39,11 @@ function transformURL(config: AxiosRequestConfig): string {
 function transformRequestData(config: AxiosRequestConfig): any {
   const { data } = config
   return transfromRequest(data)
+}
+
+function transformHeaders(config: AxiosRequestConfig): any {
+  const { headers = {}, data } = config
+  return processHeaders(headers, data)
 }
 
 export default axios
