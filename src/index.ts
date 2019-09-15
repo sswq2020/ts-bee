@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from './types'
+import { AxiosRequestConfig, AxiosPromise } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
 import { transfromRequest } from './helpers/data'
@@ -8,9 +8,9 @@ import { processHeaders } from './helpers/headers'
  * @description axios函数的主体,调用xhr函数,实现浏览器ajax功能
  * @param {AxiosRequestConfig} config
  */
-function axios(config: AxiosRequestConfig): void {
+function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config)
 }
 
 /**
