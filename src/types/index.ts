@@ -26,5 +26,23 @@ export interface AxiosRequestConfig {
   method?: Method
   data?: any
   params?: any
-  headers?:any
+  headers?: any
+  responseType?: XMLHttpRequestResponseType
 }
+
+/**
+ * @interface 响应参数的配置
+ */
+export interface AxiosResponse {
+  data: any
+  status: number
+  statusText: string
+  headers: any
+  config: AxiosRequestConfig
+  request: any
+}
+
+/**
+ * @interface 响应值必须是Promise,这样必须继承于interface Promise<T>,其中的T是AxiosResponse
+ */
+export interface AxiosPromise extends Promise<AxiosResponse> {}
