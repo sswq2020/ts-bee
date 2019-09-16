@@ -29,14 +29,14 @@ router.get('/base/get', function(req, res) {
 })
 
 router.post('/base/post',function(req,res){
-  // let postData = ''
-  // req.on('data', chunk => {
-  //    postData += chunk.toString()
-  // })
-  // req.on('end', () => {
-  //   res.json(JSON.parse(postData))
-  // })
-  res.json(req.body)
+  let postData = ''
+  req.on('data', chunk => {
+     postData += chunk.toString()
+  })
+  req.on('end', () => {
+    res.json(JSON.parse(postData))
+  })
+  // res.json(req.body)
 
 })
 
