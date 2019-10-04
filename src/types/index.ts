@@ -47,3 +47,14 @@ export interface AxiosResponse {
  * @interface 响应值必须是Promise,这样必须继承于interface Promise<T>,其中的T是AxiosResponse
  */
 export interface AxiosPromise extends Promise<AxiosResponse> {}
+
+/**
+ * @interface 用于处理错误信息
+ */
+export interface AxiosError extends Error {
+    config: AxiosRequestConfig
+    code?:string | null
+    request?:any
+    response?:AxiosResponse
+    isAxiosError:boolean
+}
