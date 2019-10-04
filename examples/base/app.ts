@@ -4,7 +4,7 @@ axios({
   method: 'get',
   url: '/base/get',
   params: {
-    foo:['bar','baz']
+    foo: ['bar', 'baz']
   }
 })
 
@@ -12,8 +12,8 @@ axios({
   method: 'get',
   url: '/base/get',
   params: {
-    foo:{
-      bar:'baz'
+    foo: {
+      bar: 'baz'
     }
   }
 })
@@ -22,7 +22,7 @@ axios({
   method: 'get',
   url: '/base/get',
   params: {
-    date:date
+    date: date
   }
 })
 
@@ -60,44 +60,52 @@ axios({
 })
 
 
+// tslint:disable-next-line: no-floating-promises
 axios({
   method: 'post',
   url: '/base/post',
-  data:{
-    a:11,
-    b:22
+  responseType:'json',
+  data: {
+    a: 11,
+    b: 22
   }
-})
+}).then((res)=>{
+  console.log(res)
+});
+
+// tslint:disable-next-line: no-floating-promises
+(async () => {
+ let res =  await axios({
+    method: 'post',
+    url: '/base/post',
+    headers: {
+      'content-type': 'application/json',
+      'Accept': 'application/json,text/plain,*/*'
+    },
+    data: {
+      a: 71,
+      b: 62
+    }
+  })
+  console.log(res)
+})()
+
+
+// const paramsString = 'q=URLUtils.searchParams&topic=api'
+// const searchParams = new URLSearchParams(paramsString)
+
+// axios({
+//   method: 'post',
+//   url: '/base/post',
+//   data:searchParams
+// })
+
+
+
+const arr = new Int32Array([21, 31])
 
 axios({
   method: 'post',
-  url: '/base/post',
-  headers:{
-    'content-type':'application/json',
-    'Accept':'application/json,text/plain,*/*'
-  },
-  data:{
-    a:71,
-    b:62
-  }
-})
-
-
-const paramsString = 'q=URLUtils.searchParams&topic=api'
-const searchParams = new URLSearchParams(paramsString)
-
-axios({
-  method: 'post',
-  url: '/base/post',
-  data:searchParams
-})
-
-
-
-const arr = new Int32Array([21,31])
-
-axios({
-  method:'post',
-  url:'/base/buffer',
-  data:arr
+  url: '/base/buffer',
+  data: arr
 })
