@@ -32,7 +32,7 @@ function processConfig(config: AxiosRequestConfig): void {
  */
 function transformURL(config: AxiosRequestConfig): string {
   const { url, params } = config
-  return buildURL(url, params)
+  return buildURL(url!, params) // 为什么加! 因为AxiosRequestConfig interface里url为可选属性,这里解构config得到的url可能为undefined,类型断言必须有url
 }
 
 /**
