@@ -18,20 +18,20 @@ app.use(webpackDevMiddleware(compiler, {
 }))
 
 
-router.get('/simple/get', function(req, res) {
+router.get('/simple/get', function (req, res) {
   res.json({
     msg: `hello world`
   })
 })
 
-router.get('/base/get', function(req, res) {
+router.get('/base/get', function (req, res) {
   res.json(req.query)
 })
 
-router.post('/base/post',function(req,res){
+router.post('/base/post', function (req, res) {
   let postData = ''
   req.on('data', chunk => {
-     postData += chunk.toString()
+    postData += chunk.toString()
   })
   req.on('end', () => {
     res.json(JSON.parse(postData))
@@ -40,37 +40,70 @@ router.post('/base/post',function(req,res){
 
 })
 
-router.post('/base/buffer',function(req,res){
+router.post('/base/buffer', function (req, res) {
   let msg = []
-  req.on('data',(chunk)=>{
-    if(chunk){
+  req.on('data', (chunk) => {
+    if (chunk) {
       msg.push(chunk)
     }
   })
-  req.on('end',() => {
+  req.on('end', () => {
     let buf = Buffer.concat(msg)
     res.json(buf.toJSON())
   })
 })
 
-router.get('/error/get',function(req,res){
-  if(Math.random()>0.01){
+router.get('/error/get', function (req, res) {
+  if (Math.random() > 0.01) {
     res.json({
       msg: `hello world`
     })
-  }else {
+  } else {
     res.status(500)
     res.end()
   }
 })
 
-router.get('/error/timeout',function(req,res){
-  setTimeout(()=>{
+router.get('/error/timeout', function (req, res) {
+  setTimeout(() => {
     res.json({
       msg: `hello world`
     })
-  },3000)
+  }, 3000)
 })
+
+registerExtendRouter()
+
+function registerExtendRouter() {
+  router.get('/extend/get', (req, res) => {
+    res.json({
+      msg: `hello world`
+    })
+  })
+  router.options('/extend/options', (req, res) => {
+    res.end()
+  })
+
+  router.delete('/extend/delete', (req, res) => {
+    res.end()
+  })
+
+  router.head('/extend/head', (req, res) => {
+    res.end()
+  })
+
+  router.post('/extend/post', (req, res) => {
+    res.json(req.body)
+  })
+
+  router.put('/extend/put', (req, res) => {
+    res.json(req.body)
+  })
+
+  router.patch('/extend/patch', (req, res) => {
+    res.json(req.body)
+  })
+}
 
 app.use(router)
 
@@ -81,7 +114,7 @@ app.use(express.static(__dirname))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-const port = 1111 ||process.env.PORT
+const port = 1111 || process.env.PORT
 module.exports = app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}, Ctrl+C to stop`)
 })
