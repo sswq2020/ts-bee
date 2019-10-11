@@ -1,6 +1,6 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
-import { parseHeaders } from './helpers/headers'
-import { createError } from './helpers/error'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
+import { parseHeaders } from '../helpers/headers'
+import { createError } from '../helpers/error'
 
 function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -15,7 +15,7 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
       XHR.timeout = timeout
     }
 
-    XHR.open(method.toLocaleUpperCase(), url, true)
+    XHR.open(method.toLocaleUpperCase(), url!, true)
     XHR.onreadystatechange = function() {
       // 查阅MDN文档 https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/onreadystatechange
       if (XHR.readyState !== 4) {
@@ -46,11 +46,11 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     }
 
     XHR.onerror = function handleError() {
-      reject(createError('Network Error',config,null,XHR))
+      reject(createError('Network Error', config, null, XHR))
     }
 
     XHR.ontimeout = function handleTimeout() {
-      reject(createError(`Timeout of ${timeout} ms exceeded`,config,'ECONNABORTED',XHR))
+      reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', XHR))
     }
 
     Object.keys(headers).forEach(name => {
@@ -70,7 +70,15 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (response.status >= 200 && response.status <= 300) {
         resolve(response)
       } else {
-        reject(createError(`Request failed with statuscode ${response.status}`,config,null,XHR,response))
+        reject(
+          createError(
+            `Request failed with statuscode ${response.status}`,
+            config,
+            null,
+            XHR,
+            response
+          )
+        )
       }
     }
   })
