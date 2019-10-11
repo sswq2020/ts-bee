@@ -1,57 +1,14 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
-import xhr from './xhr'
-import { buildURL } from './helpers/url'
-import { transfromRequest, transfromResponse } from './helpers/data'
-import { processHeaders } from './helpers/headers'
+import { AxiosInstance } from './types/index'
+import Bee from './core/Axios'
+import { extend } from './helpers/util'
 
-/**
- * @description axios函数的主体,调用xhr函数,实现浏览器ajax功能
- * @param {AxiosRequestConfig} config
- */
-function axios(config: AxiosRequestConfig): AxiosPromise {
-  processConfig(config)
-  return xhr(config).then(res => {
-    // Promise.prototype.then---> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then
-    return transformResponseData(res)
-  })
+function createInstance(): AxiosInstance {
+  const context = new Bee()
+  let instance = Bee.prototype.request.bind(context) // 原型方法的的赋值特别要注意this的绑定，不仅仅是这里
+  instance = extend(instance, context)
+  return instance as AxiosInstance
 }
 
-/**
- * @description 对config每一个配置进行包装处理
- * @param {AxiosRequestConfig} config
- */
-function processConfig(config: AxiosRequestConfig): void {
-  config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
-}
-
-/**
- * @description 调用buildURL函数,对utl进行处理
- * @param {AxiosRequestConfig} config
- */
-function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url!, params) // 为什么加! 因为AxiosRequestConfig interface里url为可选属性,这里解构config得到的url可能为undefined,类型断言必须有url
-}
-
-/**
- * @description 调用buildURL函数,对data进行处理
- * @param {AxiosRequestConfig} config
- */
-function transformRequestData(config: AxiosRequestConfig): any {
-  const { data } = config
-  return transfromRequest(data)
-}
-
-function transformHeaders(config: AxiosRequestConfig): any {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
-
-function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transfromResponse(res.data)
-  return res
-}
+const axios = createInstance()
 
 export default axios
