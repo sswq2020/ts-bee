@@ -34,8 +34,8 @@ export interface AxiosRequestConfig {
 /**
  * @interface 响应参数的配置
  */
-export interface AxiosResponse {
-  data: any
+export interface AxiosResponse<T = any> { // 其实T就足够了,但是万一不传T，要有一个any
+  data: T
   status: number
   statusText: string
   headers: any
@@ -44,9 +44,9 @@ export interface AxiosResponse {
 }
 
 /**
- * @interface 响应值必须是Promise,这样必须继承于interface Promise<T>,其中的T是AxiosResponse
+ * @interface 响应值必须是Promise,这样必须继承于interface Promise<T>,其中的T是AxiosResponse<T>,为了避免AxiosPromise<T>中的值不传,所以T=any
  */
-export interface AxiosPromise extends Promise<AxiosResponse> {}
+export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 /**
  * @interface 用于处理错误信息
@@ -66,28 +66,28 @@ export interface Axios {
   // 能分清interface中的函数类型和类类型的方法吗？因为混合类型经常碰到这种问题
   // 这里是类类型的方法,专门用于约束class类的方法
   // 能分清主要看是否命名,命名了就是类类型的方法
-  request(config: AxiosRequestConfig): AxiosPromise
+  request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
 
-  get(url: string, config?: AxiosRequestConfig): AxiosPromise
+  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  delete(url: string, config?: AxiosRequestConfig): AxiosPromise
+  delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  head(url: string, config?: AxiosRequestConfig): AxiosPromise
+  head<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  options(url: string, config?: AxiosRequestConfig): AxiosPromise
+  options<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
-  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
 /**
  * @interface AxiosInstance 本来只是专门约束的一个函数,由于继承了Axios,函数又有了自己的属性方法便扩展成混合类型,这种分开定义再继承方式很好 //https://typescript.bootcss.com/interfaces.html
  */
 export interface AxiosInstance extends Axios {
-  (config: AxiosRequestConfig): AxiosPromise
+  <T =any>(config: AxiosRequestConfig): AxiosPromise<T>
 
-  (url:String,config?:AxiosRequestConfig):AxiosPromise
+  <T =any>(url:String,config?:AxiosRequestConfig):AxiosPromise<T>
 }
