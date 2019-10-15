@@ -75,6 +75,17 @@ router.get('/error/timeout', function (req, res) {
 registerExtendRouter()
 
 function registerExtendRouter() {
+  router.get('/extend/user', (req, res) => {
+    res.json({
+      code:0,
+      message:'success',
+      result:{
+        name:'sswq',
+        age:28
+      }
+    })
+  })
+
   router.get('/extend/get', (req, res) => {
     res.json({
       msg: `hello world`
