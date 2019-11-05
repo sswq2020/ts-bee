@@ -91,3 +91,27 @@ export interface AxiosInstance extends Axios {
 
   <T =any>(url:String,config?:AxiosRequestConfig):AxiosPromise<T>
 }
+
+
+/**
+ * @interface AxiosInterceptorManage 拦截器管理类接口
+ */
+export interface AxiosInterceptorManage<T> {
+  /***包含use方法,参数类似Pormise里的resolved和rejected,返回值是拦截器的id,所以是number类型**/
+  use(resolved:ResolvedFn<T>,rejected?:RejectedFn):number
+  /***包含eject方法,参数是是拦截器的id,所以是number类型**/
+  eject(id:number):void
+}
+
+/**
+ * @interface ResolvedFn泛型接口专门用来约束resolved,返回值类型=>同步T或者异步=>Promise<T>
+ */
+export interface ResolvedFn<T>{
+  (val:T):T|Promise<T>
+}
+/**
+ * @interface RejectedFn泛型接口专门用来约束rejected
+ */
+export interface RejectedFn{
+  (error:any):any
+}
