@@ -60,9 +60,14 @@ export interface AxiosError extends Error {
 }
 
 /**
- * @interface Axios 专门用来约束class Axios
+ * @interface Axios 专门用来约束class Axios,后面叫Bee
  */
 export interface Axios {
+  interceptors:{
+    request:AxiosInterceptorManage<AxiosRequestConfig>,
+    response:AxiosInterceptorManage<AxiosResponse>
+  }
+
   // 能分清interface中的函数类型和类类型的方法吗？因为混合类型经常碰到这种问题
   // 这里是类类型的方法,专门用于约束class类的方法
   // 能分清主要看是否命名,命名了就是类类型的方法
