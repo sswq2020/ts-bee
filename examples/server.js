@@ -72,16 +72,21 @@ router.get('/error/timeout', function (req, res) {
   }, 3000)
 })
 
+router.get('/interceptor/get',(req,res)=>{
+  res.end("hello")
+})
+
 registerExtendRouter()
+// registerInterceptorRouter()
 
 function registerExtendRouter() {
   router.get('/extend/user', (req, res) => {
     res.json({
-      code:0,
-      message:'success',
-      result:{
-        name:'sswq',
-        age:28
+      code: 0,
+      message: 'success',
+      result: {
+        name: 'sswq',
+        age: 28
       }
     })
   })
@@ -115,6 +120,12 @@ function registerExtendRouter() {
     res.json(req.body)
   })
 }
+
+// function registerInterceptorRouter() {
+//   router.get('/interceptor/get',(req,res)=>{
+//     res.end("hello")
+//   })
+// }
 
 app.use(router)
 
