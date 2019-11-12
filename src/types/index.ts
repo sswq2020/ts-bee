@@ -29,6 +29,8 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+
+  [propName:string]:any
 }
 
 /**
@@ -63,6 +65,8 @@ export interface AxiosError extends Error {
  * @interface Axios 专门用来约束class Axios,后面叫Bee
  */
 export interface Axios {
+  defaults:AxiosRequestConfig
+
   interceptors:{
     request:AxiosInterceptorManage<AxiosRequestConfig>,
     response:AxiosInterceptorManage<AxiosResponse>
