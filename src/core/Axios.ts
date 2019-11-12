@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosPromise,AxiosResponse, Axios,ResolvedFn,RejectedFn } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './InterceptorManager'
-
+import mergeConfig from './mergeConfig'
 /**
  * @interface Axios.interceptors的约束接口,包含一个request,和response的属性，类型都是InterceptorManager<T>
  *
@@ -42,6 +42,8 @@ export default class Bee implements Axios {
     }else{
       config = url
     }
+
+    config = mergeConfig(this.defaults,config)
 
     const chain:PromiseChain<any>[] = [{
       resolved:dispatchRequest,
