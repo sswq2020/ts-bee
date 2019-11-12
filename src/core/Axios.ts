@@ -18,10 +18,14 @@ interface PromiseChain<T>{
 }
 
 export default class Bee implements Axios {
+  defaults:AxiosRequestConfig
+
+
   // 拦截器属性
   interceptors:Interceptors
 
-  constructor(){
+  constructor(initConfig:AxiosRequestConfig){
+    this.defaults = initConfig
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
       response:new InterceptorManager<AxiosResponse>()
