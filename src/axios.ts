@@ -9,7 +9,7 @@ function createInstance(config: AxiosRequestConfig): AxiosInstance {
   instance = extend(instance, context)
   return instance as AxiosInstance
 }
-
+// 在实例化Axios类的时候,我们已经提供一个默认的配置,开发者自定义的配置与default进行合并
 const axios = createInstance(defaults)
 
 export default axios

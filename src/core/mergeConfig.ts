@@ -47,7 +47,11 @@ stratKeysDeepMerge.forEach(key=>{
 })
 
 
-
+/**其实这个函数作用就是
+ * 对象里的'url','params','data'字段在config1,config2里采取fromVal2Strat策略,
+ * 对象里的'headers'字段在config1,config2里采取deepMergeStrat策略
+ * 对象里的其他字段采取defaultStrat策略
+ */
 export default function mergeConfig(config1:AxiosRequestConfig,config2?:AxiosRequestConfig){
   if(!config2){
     config2 = {}

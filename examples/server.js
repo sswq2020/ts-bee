@@ -77,6 +77,7 @@ router.get('/interceptor/get',(req,res)=>{
 })
 
 registerExtendRouter()
+registerConfigRouter()
 // registerInterceptorRouter()
 
 function registerExtendRouter() {
@@ -117,6 +118,12 @@ function registerExtendRouter() {
   })
 
   router.patch('/extend/patch', (req, res) => {
+    res.json(req.body)
+  })
+}
+
+function registerConfigRouter(){
+  router.post('/config/post',(req,res)=>{
     res.json(req.body)
   })
 }

@@ -18,12 +18,14 @@ interface PromiseChain<T>{
 }
 
 export default class Bee implements Axios {
+  // 默认配置项
   defaults:AxiosRequestConfig
 
 
   // 拦截器属性
   interceptors:Interceptors
 
+  // 实例化的时候已经默认传入一个配置
   constructor(initConfig:AxiosRequestConfig){
     this.defaults = initConfig
     this.interceptors = {
@@ -42,7 +44,7 @@ export default class Bee implements Axios {
     }else{
       config = url
     }
-
+    // 参数this.default是实例化的时候传入的,参数config是实例化后,使用的开发者自己传入的,
     config = mergeConfig(this.defaults,config)
 
     const chain:PromiseChain<any>[] = [{
