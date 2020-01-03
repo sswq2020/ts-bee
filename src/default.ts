@@ -1,4 +1,6 @@
 import {AxiosRequestConfig} from './types'
+import { processHeaders } from './helpers/headers'
+import { transfromRequest as transferRequest,transfromResponse as  transferResponse} from './helpers/data'
 export const defaults:AxiosRequestConfig = {
   method:'get',
 
@@ -8,9 +10,16 @@ export const defaults:AxiosRequestConfig = {
     common:{
       Accept:'application/json,text/plain,*/*'
     }
-  }
-}
+  },
+  transformRequest:[function(data,headers){
+    processHeaders(headers,data)
+    return transferRequest(data)
+  }],
+  transformResponse:[function(data){
+    return transferResponse(data)
+  }]
 
+}
 
 const methodsNoData = ['delete','get','head','options']
 
