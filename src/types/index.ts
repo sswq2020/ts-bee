@@ -104,6 +104,9 @@ export interface AxiosInstance extends Axios {
   <T =any>(url:String,config?:AxiosRequestConfig):AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInstance {
+  create(config?:AxiosRequestConfig):AxiosInstance
+}
 
 /**
  * @interface AxiosInterceptorManage 拦截器管理类接口

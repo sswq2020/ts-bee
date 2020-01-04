@@ -36,3 +36,30 @@ axios({
 }).then((res) => {
   console.log(res.data)
 })
+
+const instance = axios.create({
+   transformRequest:[(function(data){
+      return qs.stringify(data)
+   }),...(axios.defaults.transformRequest as AxiosTransformer[])
+  ],
+  transformResponse: [
+    ...(axios.defaults.transformResponse as AxiosTransformer[]), function (data) {
+      if (typeof data === 'object') {
+        data.b = 2
+      }
+    }
+  ]
+})
+
+// tslint:disable-next-line: no-floating-promises
+instance({
+  method: 'post',
+  url: '/base/post',
+  responseType:'json',
+  data: {
+    a: 11,
+    b: 22
+  }
+}).then((res)=>{
+  console.log(res)
+})
