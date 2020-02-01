@@ -32,6 +32,7 @@ export interface AxiosRequestConfig {
 
   transformRequest?:AxiosTransformer [] | AxiosTransformer,
   transformResponse?:AxiosTransformer [] | AxiosTransformer,
+  cancelToken?:CancelToken
 
   [propName:string]:any
 }
@@ -106,6 +107,12 @@ export interface AxiosInstance extends Axios {
 
 export interface AxiosStatic extends AxiosInstance {
   create(config?:AxiosRequestConfig):AxiosInstance
+
+  CancelToken:CancelTokenStatic
+
+  Cancel:CancelStatic
+
+  isCancel:(value:any)=>boolean
 }
 
 /**
@@ -136,4 +143,58 @@ export interface RejectedFn{
  */
 export interface AxiosTransformer  {
   (data:any,headers?:any):any
+}
+
+/**
+ * @interface CancelToken接口专门用来约束的 class CancelToken,实例部分约束
+ * @param promise属性 类型是Promise<Cancel>
+ * @param reason属性 类型是Cancel
+ * @param throwIfRequested方法
+ */
+export interface CancelToken{
+  promise:Promise<Cancel>
+  reason?:Cancel
+
+  throwIfRequested():void
+}
+
+/***
+ * @interface 其实就是一个函数类型的接口,翻译一下 function cc (message) {}
+ **/
+export interface Canceler{
+  (message?:string):void
+}
+
+/***
+ * @interface 其实就是一个函数类型的接口,翻译一下 function aa (e) {}
+ * 其中e必须是函数,类型是Canceler,所以嵌套比较多，一下子不太容易理解
+ */
+export interface CancelExecutor{
+  (cancel:Canceler):void
+}
+
+export interface CancelTokenSource {
+  token:CancelToken
+  cancel:Canceler
+}
+
+
+/**
+ * @interface CancelTokenStatic 是构造器签名接口,记住不能用类去实现这个接口！
+ * @static 可以看作CancelToken静态部分的约束,但是正如上面所说的,绝不能用类去实现这个接口！
+ * @description 这个构造器签名接口拥有2个功能,第一个功能可以直接返回new CancelToken的实例
+ * @param source  第二个功能提供的静态方法source, 返回类型为CancelTokenSource
+ */
+export interface CancelTokenStatic {
+  new(executor:CancelExecutor):CancelToken
+
+  source():CancelTokenSource
+}
+
+export interface Cancel{
+  message?:string
+}
+
+export interface CancelStatic{
+  new(message?:string):Cancel
 }
