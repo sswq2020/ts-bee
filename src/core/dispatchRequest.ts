@@ -1,8 +1,7 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
 import { buildURL } from '../helpers/url'
-import { transfromRequest, transfromResponse } from '../helpers/data'
-import { processHeaders,flattenHeaders } from '../helpers/headers'
+import { flattenHeaders } from '../helpers/headers'
 import transform from './transform'
 
 /**
@@ -10,6 +9,7 @@ import transform from './transform'
  * @param {AxiosRequestConfig} config
  */
 function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  throwIfCancellationRequested(config)
   processConfig(config)
   return xhr(config).then(res => {
     // Promise.prototype.then---> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then
@@ -41,5 +41,14 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transform(res.data,res.headers,res.config.transformResponse)
   return res
 }
+
+function throwIfCancellationRequested(config:AxiosRequestConfig):void{
+  if(config.cancelToken){
+    config.cancelToken.throwIfRequested()
+  }
+}
+
+
+
 
 export default dispatchRequest
