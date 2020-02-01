@@ -72,7 +72,7 @@ router.get('/error/timeout', function (req, res) {
   }, 3000)
 })
 
-router.get('/interceptor/get',(req,res)=>{
+router.get('/interceptor/get', (req, res) => {
   res.end("hello")
 })
 
@@ -122,11 +122,23 @@ function registerExtendRouter() {
   })
 }
 
-function registerConfigRouter(){
-  router.post('/config/post',(req,res)=>{
+function registerConfigRouter() {
+  router.post('/config/post', (req, res) => {
     res.json(req.body)
   })
 }
+
+router.get('/cancel/get', (req, res) => {
+  setTimeout(() => {
+    res.json('hello')
+  },1000)
+})
+
+router.post('/cancel/post', (req, res) => {
+  setTimeout(() => {
+    res.json('324234234234')
+  },1000)
+})
 
 // function registerInterceptorRouter() {
 //   router.get('/interceptor/get',(req,res)=>{
