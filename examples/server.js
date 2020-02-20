@@ -172,6 +172,11 @@ router.post('/more/post', function (req, res) {
   }
 })
 
+router.get('/more/304', function(req, res) {
+  res.status(304)
+  res.end()
+})
+
 app.use(multipart({
   uploadDir: path.resolve(__dirname, 'upload-file')
 }))

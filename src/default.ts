@@ -21,7 +21,11 @@ export const defaults:AxiosRequestConfig = {
   }],
   transformResponse:[function(data){
     return transferResponse(data)
-  }]
+  }],
+
+  validateStatus(status){
+   return status >= 200 && status <= 300
+  }
 
 }
 
