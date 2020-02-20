@@ -3,12 +3,16 @@ import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
 import {isURLSameOrigin} from '../helpers/url'
 import cookie from '../helpers/cookie'
+import {isFormData} from '../helpers/util'
+
 function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
     const { url, method = 'get', data = null, headers = {}, responseType, timeout, cancelToken,
     withCredentials,
     xsrfCookieName,
-    xsrfHeaderName
+    xsrfHeaderName,
+    onDownloadProgress,
+    onUploadProgress
 
   } = config
     const XHR = new XMLHttpRequest()
@@ -61,6 +65,18 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     XHR.ontimeout = function handleTimeout() {
       reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', XHR))
+    }
+
+    if(onDownloadProgress){
+      XHR.onprogress = onDownloadProgress
+    }
+
+    if(onUploadProgress) {
+      XHR.upload.onprogress = onUploadProgress
+    }
+
+    if(isFormData(data)){
+      delete headers['Content-Type']
     }
 
     // 首先判断如果是配置 withCredentials 为 true 或者是同域请求，我们才会请求 headers 添加 xsrf 相关的字段。
