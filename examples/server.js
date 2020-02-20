@@ -1,9 +1,11 @@
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
+const multipart = require('connect-multiparty')
 const WebpackConfig = require('./webpack.config')
 const router = express.Router()
 
@@ -24,6 +26,10 @@ app.use(express.static(__dirname,{
   setHeaders(res){
     res.cookie('XSRF-TOKEN-D','1234vf')
   }
+}))
+
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
 }))
 
 
@@ -156,6 +162,11 @@ router.post('/cancel/post', (req, res) => {
   setTimeout(() => {
     res.json('324234234234')
   },1000)
+})
+
+router.post('/more/upload', function(req, res) {
+  console.log(req.body, req.files)
+  res.end('upload success!')
 })
 
 // function registerInterceptorRouter() {
