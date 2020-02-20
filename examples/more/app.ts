@@ -94,7 +94,7 @@ axios.post('/more/post',{
   a:1
 },{
   auth:{
-    username:'Yee',
+    username:'Yee1',
     password:'123456'
   }
 }).then(res=>{

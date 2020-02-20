@@ -3,6 +3,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const webpack = require('webpack')
+const atob = require('atob')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const multipart = require('connect-multiparty')
@@ -14,6 +15,10 @@ require('./server2')
 const app = express()
 const compiler = webpack(WebpackConfig)
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
+
 app.use(webpackDevMiddleware(compiler, {
   publicPath: '/__build__/',
   stats: {
@@ -21,21 +26,6 @@ app.use(webpackDevMiddleware(compiler, {
     chunks: false
   }
 }))
-
-app.use(express.static(__dirname,{
-  setHeaders(res){
-    res.cookie('XSRF-TOKEN-D','1234vf')
-  }
-}))
-
-app.use(multipart({
-  uploadDir: path.resolve(__dirname, 'upload-file')
-}))
-
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cookieParser())
 
 
 router.get('/simple/get', function (req, res) {
@@ -96,7 +86,7 @@ router.get('/interceptor/get', (req, res) => {
   res.end("hello")
 })
 
-router.get('/more/get',(req,res)=>{
+router.get('/more/get', (req, res) => {
   res.json(req.cookies)
 })
 
@@ -155,19 +145,37 @@ function registerConfigRouter() {
 router.get('/cancel/get', (req, res) => {
   setTimeout(() => {
     res.json('hello')
-  },1000)
+  }, 1000)
 })
 
 router.post('/cancel/post', (req, res) => {
   setTimeout(() => {
     res.json('324234234234')
-  },1000)
+  }, 1000)
 })
 
-router.post('/more/upload', function(req, res) {
+router.post('/more/upload', function (req, res) {
   console.log(req.body, req.files)
   res.end('upload success!')
 })
+
+
+router.post('/more/post', function (req, res) {
+  const auth = req.headers.authorization
+  const [type, credentials] = auth.split(' ')
+  console.log(atob(credentials))
+  const [username, password] = atob(credentials).split(':')
+  if (type === 'Basic' && username === 'Yee' && password === '123456') {
+    res.end('123123')
+  } else {
+    res.end('UnAuthorization')
+  }
+})
+
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+}))
+
 
 // function registerInterceptorRouter() {
 //   router.get('/interceptor/get',(req,res)=>{
