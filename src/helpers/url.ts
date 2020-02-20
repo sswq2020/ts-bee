@@ -1,5 +1,10 @@
 import { isDate, isPlainObject } from './util'
 
+interface URLOrigin{
+  protocol:string
+  host:string
+}
+
 /**
  * @author sswq
  * @param {string} val 传入的字符串
@@ -62,4 +67,32 @@ export function buildURL(url: string, params: any): string {
     url = url + (url.indexOf('?') === -1 ? '?' + serimal : '&' + serimal)
   }
   return url
+}
+
+/**
+ * @function 判断是否是同域
+ * @param {string} requestURL 请求地址
+ */
+export function isURLSameOrigin(requestURL:string):boolean{
+   const parseOrigin = resolveURL(requestURL);
+   return (parseOrigin.protocol === currentOrigin.protocol && parseOrigin.host === currentOrigin.host)
+}
+
+const urlParsingNode = document.createElement('a')
+/***当前页面的href**/
+const currentOrigin = resolveURL(window.location.href)
+
+
+/**
+ * @function 生成一个a标签,看它的href属性,解构其protocol,host
+ * @param {string} requestURL 请求地址
+ */
+function resolveURL(url:string):URLOrigin{
+  urlParsingNode.setAttribute('href',url);
+  const {protocol,host} = urlParsingNode
+  return {
+    protocol,
+    host
+  }
+
 }
