@@ -1,6 +1,7 @@
 import axios, { AxiosError } from '../../src/index'
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
+import qs from 'qs'
 
 // document.cookie = 'a=b'
 
@@ -90,14 +91,14 @@ uploadEl!.addEventListener('click', e => {
 })
 
 // tslint:disable-next-line: no-floating-promises
-axios.post('/more/post',{
-  a:1
-},{
-  auth:{
-    username:'Yee1',
-    password:'123456'
+axios.post('/more/post', {
+  a: 1
+}, {
+  auth: {
+    username: 'Yee1',
+    password: '123456'
   }
-}).then(res=>{
+}).then(res => {
   console.log(res)
 })
 
@@ -115,4 +116,40 @@ axios.get('/more/304', {
   console.log(res)
 }).catch((e: AxiosError) => {
   console.log(e.message)
+})
+
+
+// tslint:disable-next-line: no-floating-promises
+axios.get('/more/get', {
+  params: new URLSearchParams('a=b&c=d')
+}).then(res => {
+  console.log(res)
+})
+
+// tslint:disable-next-line: no-floating-promises
+axios.get('/more/get', {
+  params: {
+    a: 1,
+    b: 2,
+    c: ['a', 'b', 'c']
+  }
+}).then(res => {
+  console.log(res)
+})
+
+const instance2 = axios.create({
+  paramsSerializer(params) {
+    return qs.stringify(params, { arrayFormat: 'brackets' })
+  }
+})
+
+// tslint:disable-next-line: no-floating-promises
+instance2.get('/more/get', {
+  params: {
+    a: 1,
+    b: 2,
+    c: ['a', 'b', 'c']
+  }
+}).then(res => {
+  console.log(res)
 })

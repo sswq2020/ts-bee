@@ -1,8 +1,12 @@
-import { isDate, isPlainObject } from './util'
+import { isDate, isPlainObject,isURLSearchParams } from './util'
 
 interface URLOrigin{
   protocol:string
   host:string
+}
+
+interface ParamsSerialzer{
+  (params:any):string
 }
 
 /**
@@ -27,38 +31,46 @@ function encode(val: string): string {
  * @param {Object} params 任意类型参数
  *
  */
-export function buildURL(url: string, params: any): string {
+export function buildURL(url: string, params: any,paramsSerialzer?:ParamsSerialzer): string {
   if (!params) {
     return url
   }
+  let serimal
 
-  let parts: Array<String> = []
-  Object.keys(params).forEach(key => {
-    let val = params[key]
-    // 当value不存在是直接跳过
-    if (val === null || val === undefined) {
-      return
-    }
-
-    let values = []
-    if (Array.isArray(val)) {
-      key = key + '[]'
-      values = val
-    } else {
-      values = [val]
-    }
-
-    values.forEach(item => {
-      if (isDate(item)) {
-        item = item.toISOString()
-      } else if (isPlainObject(item)) {
-        item = JSON.stringify(item)
+  if(paramsSerialzer){
+    serimal = paramsSerialzer(params);
+  }else if(isURLSearchParams(params)){
+    serimal = params.toString()
+  }else {
+    let parts: Array<String> = []
+    Object.keys(params).forEach(key => {
+      let val = params[key]
+      // 当value不存在是直接跳过
+      if (val === null || val === undefined) {
+        return
       }
-      parts.push(`${encode(key)}=${encode(item)}`)
-    })
-  })
 
-  let serimal = parts.join('&')
+      let values = []
+      if (Array.isArray(val)) {
+        key = key + '[]'
+        values = val
+      } else {
+        values = [val]
+      }
+
+      values.forEach(item => {
+        if (isDate(item)) {
+          item = item.toISOString()
+        } else if (isPlainObject(item)) {
+          item = JSON.stringify(item)
+        }
+        parts.push(`${encode(key)}=${encode(item)}`)
+      })
+    })
+
+    serimal = parts.join('&')
+  }
+
   if (serimal) {
     let marIndex: number = url.indexOf('#')
     if (marIndex > -1) {
