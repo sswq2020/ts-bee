@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosPromise,AxiosResponse, Axios,ResolvedFn,RejectedFn } from '../types'
-import dispatchRequest from './dispatchRequest'
+import dispatchRequest,{transformURL} from './dispatchRequest'
 import InterceptorManager from './InterceptorManager'
 import mergeConfig from './mergeConfig'
 /**
@@ -89,4 +89,8 @@ export default class Bee implements Axios {
     return this.request(Object.assign(config || {}, { method: 'OPTIONS', url, data }))
   }
 
+  getUri(config?: AxiosRequestConfig):string{
+    config = mergeConfig(this.defaults,config)
+    return transformURL(config!)
+  }
 }

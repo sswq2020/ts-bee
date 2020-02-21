@@ -39,7 +39,7 @@ export interface AxiosRequestConfig {
   onDownloadProgress?:(e:ProgressEvent)=>void
   onUploadProgress?:(e:ProgressEvent)=>void
   auth?:AxiosBasicCredentials
-  validateStatus?:(status:number)=>boolean
+  validateStatus?(status:number):boolean
   paramsSerialzer?:(params:any)=>string
   baseURL?:string
 
@@ -88,9 +88,9 @@ export interface Axios {
   // 能分清interface中的函数类型和类类型的方法吗？因为混合类型经常碰到这种问题
   // 这里是类类型的方法,专门用于约束class类的方法
   // 能分清主要看是否命名,命名了就是类类型的方法
-  request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
+  request:<T = any>(config: AxiosRequestConfig)=> AxiosPromise<T>
 
-  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+  get<T = any>(url: string, config?: AxiosRequestConfig):AxiosPromise<T>
 
   delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 
@@ -103,6 +103,9 @@ export interface Axios {
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  getUri(config?:AxiosRequestConfig):string
+
 }
 
 /**
@@ -115,14 +118,25 @@ export interface AxiosInstance extends Axios {
 }
 
 export interface AxiosStatic extends AxiosInstance {
-  create(config?:AxiosRequestConfig):AxiosInstance
+  create:(config?:AxiosRequestConfig)=>AxiosInstance
 
   CancelToken:CancelTokenStatic
 
   Cancel:CancelStatic
 
   isCancel:(value:any)=>boolean
+
+  all<T>(promises: Array< T | Promise<T> >):Promise<T[]>
+
+  spread<T,R>(callback:(...args:T[])=>R):(arr:T[])=>R
+
+  Axios: AxiosClassStatic
 }
+
+export interface AxiosClassStatic {
+  new (config:AxiosRequestConfig):Axios
+}
+
 
 /**
  * @interface AxiosInterceptorManage 拦截器管理类接口
