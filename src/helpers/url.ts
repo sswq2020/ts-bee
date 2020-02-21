@@ -108,3 +108,19 @@ function resolveURL(url:string):URLOrigin{
   }
 
 }
+
+/**
+ * @function 是否是绝对路径的地址 比如http/http或者//开头就是
+ * @param {string} url 请求地址
+ */
+export function isAbsoluteURL(url:string):boolean{
+  return /(^[a-z][a-z\d+\-\.]*:)?\/\//i.test(url)
+}
+/**
+ * @function 基础地址+拼接地址
+ * @param {string} baseURL 基础地址
+ * @param {string} relativeURL 拼接地址
+ */
+export function combineURL(baseURL:string,relativeURL?:string):string{
+  return relativeURL ? baseURL.replace(/\/+$/,'')+'/'+relativeURL.replace(/^\/+/,''): baseURL
+}

@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
-import { buildURL } from '../helpers/url'
+import { buildURL,isAbsoluteURL,combineURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/headers'
 import transform from './transform'
 
@@ -32,7 +32,10 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param {AxiosRequestConfig} config
  */
 function transformURL(config: AxiosRequestConfig): string {
-  const { url, params,paramsSerialzer } = config
+  let { url, params,paramsSerialzer,baseURL } = config
+  if(baseURL && !isAbsoluteURL(url!)){
+    url = combineURL(baseURL,url)
+  }
   // 为什么加! 因为AxiosRequestConfig interface里url为可选属性,这里解构config得到的url可能为undefined,类型断言必须有url
   return buildURL(url!, params,paramsSerialzer)
 }

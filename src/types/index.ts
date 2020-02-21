@@ -41,6 +41,7 @@ export interface AxiosRequestConfig {
   auth?:AxiosBasicCredentials
   validateStatus?:(status:number)=>boolean
   paramsSerialzer?:(params:any)=>string
+  baseURL?:string
 
   [propName:string]:any
 }
