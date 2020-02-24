@@ -3,16 +3,16 @@
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "main": "dist/ts-bee.umd.js",
-  "module": "dist/ts-bee.es5.js",
-  "typings": "dist/types/ts-bee.d.ts",
+  "main": "dist/axios.umd.js",
+  "module": "dist/axios.es5.js",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
   "author": "sswq2020 <a309108243@qq.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/sswq2020/ts-bee"
   },
   "license": "MIT",
   "engines": {
